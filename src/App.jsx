@@ -1,13 +1,17 @@
-import { useState } from 'react'
+import { useState } from 'react' // reactライブラリからuseSateフックをインポート フック：Reactの機能を部品内で使用する方法
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css' // fromがない=副作用インポート ブラウザに描画時に必要と明示的に指定
 
-function App() {
+
+// 大文字で開始
+// jsxを返す
+// classNameでCSSのクラスを指定
+function App() { // 大文字スタートで小文字のパスカルケースで命名すること
   const [count, setCount] = useState(0)
 
   return (
-    <>
+    <> {/* フラグメント：グループ化 */}
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -32,4 +36,5 @@ function App() {
   )
 }
 
+// App関数を他からも利用できるようにする
 export default App
