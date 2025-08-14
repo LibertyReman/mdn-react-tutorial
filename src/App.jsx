@@ -8,7 +8,12 @@ function App(props) {
   //const taskList = props.tasks?.map((task) => <Todo />);
   // ?.にすることでオプションチェーンでtasksにmap関数がなかった場合（Arrayじゃなかった場合）にエラーにならない
   const taskList = props.tasks?.map((task) => (
-    <Todo id={task.id} name={task.name} completed={task.completed} />
+    <Todo
+      id={task.id}
+      name={task.name}
+      completed={task.completed}
+      key={task.id} // keyはReactで管理されている特別なプロップ 反復処理でレンダリングするものには常に固有なキーが必要
+    />
   ));
   console.log(taskList);
   return (
