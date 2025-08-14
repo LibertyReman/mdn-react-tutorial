@@ -43,7 +43,7 @@ function App(props) {
         role="list"
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading">
-        <Todo name="Eat" /> {/* nameはプロップ（プロパティ） */}
+        <Todo name="Eat" completed/> {/* name,completedはプロップ（プロパティ） */}
         <Todo name="Sleep" />
         <Todo name="Repeat" />
       </ul>
