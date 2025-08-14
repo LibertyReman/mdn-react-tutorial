@@ -1,6 +1,16 @@
 import Todo from "./components/Todo";
 
 function App(props) {
+  // main.jsxのDATAが渡ってくる
+  console.log(props);
+  // props.tasks が undefined または null であるかどうかを確認してから、タスク名の新しい配列を作成
+  //const taskList = props.tasks?.map((task) => task.name);
+  //const taskList = props.tasks?.map((task) => <Todo />);
+  // ?.にすることでオプションチェーンでtasksにmap関数がなかった場合（Arrayじゃなかった場合）にエラーにならない
+  const taskList = props.tasks?.map((task) => (
+    <Todo id={task.id} name={task.name} completed={task.completed} />
+  ));
+  console.log(taskList);
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
@@ -43,9 +53,13 @@ function App(props) {
         role="list"
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading">
-        <Todo name="Eat" id="todo-0" completed /> {/* name,completedはプロップ（プロパティ） */}
+        {/* name,completedなどはプロップ（プロパティ） */}
+        {/*
+        <Todo name="Eat" id="todo-0" completed />
         <Todo name="Sleep" id="todo-1" />
         <Todo name="Repeat" id="todo-2" />
+        */}
+        {taskList}
       </ul>
     </div>
   );
