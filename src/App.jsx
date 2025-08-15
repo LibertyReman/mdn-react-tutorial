@@ -1,20 +1,26 @@
+import { useState } from "react";
+import { nanoid } from "nanoid"; // 一意のID生成用
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 
 function App(props) {
-  // コールバック関数
-  function addTask(name) {
-    alert(name);
-  }
-
   // main.jsxのDATAが渡ってくる
   console.log(props);
+  const [tasks, setTasks] = useState(props.tasks);
+
+  // コールバック関数
+  function addTask(name) {
+    //alert(name);
+    const newTask = { id: `todo-${nanoid()}`, name, completed: false }; // 新しいタスクの作成
+    setTasks([...tasks, newTask]); // 配列更新（...スプレッド構文で全ての既存の配列を並べ、そこにnewTaskを追加する）
+  }
+
   // props.tasks が undefined または null であるかどうかを確認してから、タスク名の新しい配列を作成
   //const taskList = props.tasks?.map((task) => task.name);
   //const taskList = props.tasks?.map((task) => <Todo />);
   // ?.にすることでオプションチェーンでtasksにmap関数がなかった場合（Arrayじゃなかった場合）にエラーにならない
-  const taskList = props.tasks?.map((task) => (
+  const taskList = tasks?.map((task) => (
     <Todo
       id={task.id}
       name={task.name}

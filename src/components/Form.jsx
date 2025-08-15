@@ -14,7 +14,7 @@ function Form(props) {
 
   // formのAddボタン押下時に呼び出し
   function handleSubmit(event) {
-    // デフォルト動作の無効化
+    // デフォルト動作の無効化 最初に書くこと
     event.preventDefault();
     if (!name) return;
 
