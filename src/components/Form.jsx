@@ -1,4 +1,9 @@
+import { useState } from "react";
+
 function Form(props) {
+  // useState() は、 2 つのアイテムを含む配列を返します。
+  // 最初のアイテムは現在の状態の値であり、 2 番目のアイテムは状態を更新するために使用できる関数です。
+  const [name, setName] = useState("Learn React");
   // formのAddボタン押下時に呼び出し
   function handleSubmit(event) {
     // デフォルト動作の無効化
@@ -20,6 +25,7 @@ function Form(props) {
         className="input input__lg"
         name="text"
         autoComplete="off"
+        value={name}
       />
       <button type="submit" className="btn btn__primary btn__lg">
         Add
