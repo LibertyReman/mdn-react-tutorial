@@ -1,6 +1,14 @@
-function Form() {
+function Form(props) {
+  // formのAddボタン押下時に呼び出し
+  function handleSubmit(event) {
+    // デフォルト動作の無効化
+    event.preventDefault();
+    alert("Hello, world!");
+    props.addTask("Say hello!"); // App.jsxのaddTask関数を呼び出し
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}> {/* onSubmitはjsxのキーワード */}
       <h2 className="label-wrapper">
         <label htmlFor="new-todo-input" className="label__lg">
           What needs to be done?

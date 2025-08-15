@@ -3,6 +3,11 @@ import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 
 function App(props) {
+  // コールバック関数
+  function addTask(name) {
+    alert(name);
+  }
+
   // main.jsxのDATAが渡ってくる
   console.log(props);
   // props.tasks が undefined または null であるかどうかを確認してから、タスク名の新しい配列を作成
@@ -21,7 +26,7 @@ function App(props) {
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
-        <Form />
+      <Form addTask={addTask} /> {/* わかりやすいようにaddTask=で関数と同じ名前でプロップを設定 */}
       <div className="filters btn-group stack-exception">
         <FilterButton />
         <FilterButton />
