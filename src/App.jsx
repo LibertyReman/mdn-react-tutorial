@@ -5,7 +5,7 @@ import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 
 function App(props) {
-  // main.jsxのDATAが渡ってくる
+  // main.jsxのDATAがtasksとして渡ってくる
   console.log(props);
   const [tasks, setTasks] = useState(props.tasks);
 
@@ -14,6 +14,25 @@ function App(props) {
     //alert(name);
     const newTask = { id: `todo-${nanoid()}`, name, completed: false }; // 新しいタスクの作成
     setTasks([...tasks, newTask]); // 配列更新（...スプレッド構文で全ての既存の配列を並べ、そこにnewTaskを追加する）
+  }
+
+  // Todo.jsxでinputタグ変更時に呼び出すように設定
+  function toggleTaskCompleted(id) {
+    const updatedTasks = tasks.map((task) => {
+      console.log('task =', task, ', id =', id, ', task.id = ', task.id);
+      // このタスクが編集されたタスクと同じIDを持っている場合
+      if (id === task.id) {
+        // taskオブジェクトをコピーして、completed だけ反転させた新しいオブジェクトを返す
+        // task に completed があれば更新、なければ新しく追加される
+        // ...スプレッド構文で全ての既存の配列を並べる
+        console.log('...task =', {...task});
+        console.log('completed: !task.completed =', {completed: !task.completed});
+        return { ...task, completed: !task.completed };
+      }
+      return task;
+    });
+    console.log('updatedTasks =', updatedTasks);
+    setTasks(updatedTasks);
   }
 
   // props.tasks が undefined または null であるかどうかを確認してから、タスク名の新しい配列を作成
@@ -26,9 +45,17 @@ function App(props) {
       name={task.name}
       completed={task.completed}
       key={task.id} // keyはReactで管理されている特別なプロップ 反復処理でレンダリングするものには常に固有なキーが必要
+      toggleTaskCompleted={toggleTaskCompleted}
     />
   ));
   console.log(taskList);
+
+  // なぜFormでSubmitするたびに、headingTextが更新されるか
+  // tasksのsetTasksが呼ばれると、React は App コンポーネントを再レンダー する。つまり関数Appを最初からもう一度実行する。
+  const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
+  const headingText = `${taskList.length} ${tasksNoun} remaining`;
+  console.log(headingText);
+
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
@@ -38,7 +65,7 @@ function App(props) {
         <FilterButton />
         <FilterButton />
       </div>
-      <h2 id="list-heading">3 tasks remaining</h2>
+      <h2 id="list-heading">{headingText}</h2>
       <ul
         role="list"
         className="todo-list stack-large stack-exception"
