@@ -7,7 +7,6 @@ import Todo from "./components/Todo";
 function App(props) {
   // main.jsxのDATAがtasksとして渡ってくる
   console.log('props = ', props);
-  const [tasks, setTasks] = useState(props.tasks);
 
   // コールバック関数
   function addTask(name) {
@@ -35,6 +34,14 @@ function App(props) {
     setTasks(updatedTasks);
   }
 
+  function deleteTask(id) {
+    // id !== task.idがtrueのときremainingTasksに代入. 削除対象のみ削除
+    const remainingTasks = tasks.filter((task) => id !== task.id);
+    //console.log('remainingTasks = ', remainingTasks);
+    setTasks(remainingTasks);
+  }
+
+  const [tasks, setTasks] = useState(props.tasks);
   // props.tasks が undefined または null であるかどうかを確認してから、タスク名の新しい配列を作成
   //const taskList = props.tasks?.map((task) => task.name);
   //const taskList = props.tasks?.map((task) => <Todo />);
@@ -45,7 +52,8 @@ function App(props) {
       name={task.name}
       completed={task.completed}
       key={task.id} // keyはReactで管理されている特別なプロップ 反復処理でレンダリングするものには常に固有なキーが必要
-      toggleTaskCompleted={toggleTaskCompleted}
+      toggleTaskCompleted={toggleTaskCompleted} // コールバックプロップ
+      deleteTask={deleteTask} // コールバックプロップ
     />
   ));
   console.log('taskList =', taskList);
@@ -83,3 +91,4 @@ function App(props) {
 }
 
 export default App;
+
