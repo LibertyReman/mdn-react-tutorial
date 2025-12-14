@@ -41,6 +41,19 @@ function App(props) {
     setTasks(remainingTasks);
   }
 
+  function editTask(id, newName) {
+    const editedTaskList = tasks.map((task) => {
+      // このタスクが編集されたタスクと同じIDを持っている場合
+      if (id === task.id) {
+        // タスクをコピーし、名前を更新する
+        return { ...task, name: newName };
+      }
+      // 編集されたタスクでない場合は、元のタスクを返します。
+      return task;
+    });
+    setTasks(editedTaskList);
+  }
+
   const [tasks, setTasks] = useState(props.tasks);
   // props.tasks が undefined または null であるかどうかを確認してから、タスク名の新しい配列を作成
   //const taskList = props.tasks?.map((task) => task.name);
@@ -54,6 +67,7 @@ function App(props) {
       key={task.id} // keyはReactで管理されている特別なプロップ 反復処理でレンダリングするものには常に固有なキーが必要
       toggleTaskCompleted={toggleTaskCompleted} // コールバックプロップ
       deleteTask={deleteTask} // コールバックプロップ
+      editTask={editTask} // コールバックプロップ
     />
   ));
   console.log('taskList =', taskList);
