@@ -6,7 +6,7 @@ import Todo from "./components/Todo";
 
 function App(props) {
   // main.jsxのDATAがtasksとして渡ってくる
-  console.log(props);
+  console.log('props = ', props);
   const [tasks, setTasks] = useState(props.tasks);
 
   // コールバック関数
@@ -19,19 +19,19 @@ function App(props) {
   // Todo.jsxでinputタグ変更時に呼び出すように設定
   function toggleTaskCompleted(id) {
     const updatedTasks = tasks.map((task) => {
-      console.log('task =', task, ', id =', id, ', task.id = ', task.id);
+      //console.log('task =', task, ', id =', id, ', task.id = ', task.id);
       // このタスクが編集されたタスクと同じIDを持っている場合
       if (id === task.id) {
         // taskオブジェクトをコピーして、completed だけ反転させた新しいオブジェクトを返す
         // task に completed があれば更新、なければ新しく追加される
         // ...スプレッド構文で全ての既存の配列を並べる
-        console.log('...task =', {...task});
-        console.log('completed: !task.completed =', {completed: !task.completed});
+        //console.log('...task =', {...task});
+        //console.log('completed: !task.completed =', {completed: !task.completed});
         return { ...task, completed: !task.completed };
       }
       return task;
     });
-    console.log('updatedTasks =', updatedTasks);
+    //console.log('updatedTasks =', updatedTasks);
     setTasks(updatedTasks);
   }
 
@@ -48,13 +48,13 @@ function App(props) {
       toggleTaskCompleted={toggleTaskCompleted}
     />
   ));
-  console.log(taskList);
+  console.log('taskList =', taskList);
 
   // なぜFormでSubmitするたびに、headingTextが更新されるか
   // tasksのsetTasksが呼ばれると、React は App コンポーネントを再レンダー する。つまり関数Appを最初からもう一度実行する。
   const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
-  console.log(headingText);
+  //console.log(headingText);
 
   return (
     <div className="todoapp stack-large">

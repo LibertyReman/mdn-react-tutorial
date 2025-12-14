@@ -1,5 +1,5 @@
 function Todo(props) {
-  console.log(props);
+  //console.log(props);
   return (
     <li className="todo stack-small">
       <div className="c-cb">

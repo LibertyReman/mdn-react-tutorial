@@ -11,6 +11,7 @@ const DATA = [
 ];
 
 createRoot(document.getElementById('root')).render(
+  // StrictModeで2回実行して壊れないかチェックするため、console.logが2回表示される
   <StrictMode>
     <App tasks={DATA} />
   </StrictMode>,
