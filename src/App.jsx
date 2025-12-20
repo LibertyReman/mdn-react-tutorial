@@ -4,7 +4,24 @@ import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 
+// JSオブジェクト
+const FILTER_MAP = {
+  // 無名関数 trueを返す
+  All: () => true,
+  // 無名関数 完了taskのみを返す
+  //function (task) {
+  //  return !task.completed;
+  //}
+  Active: (task) => !task.completed,
+  Completed: (task) => task.completed,
+};
+// FILTER_MAPのキーのみ取得しフィルター名の配列を作成
+const FILTER_NAMES = Object.keys(FILTER_MAP);
+
+// Appはコンポーネント. 再レンダリングで呼び出される
 function App(props) {
+  const [filter, setFilter] = useState("All");
+
   // main.jsxのDATAがtasksとして渡ってくる
   console.log('props = ', props);
 
@@ -59,18 +76,30 @@ function App(props) {
   //const taskList = props.tasks?.map((task) => task.name);
   //const taskList = props.tasks?.map((task) => <Todo />);
   // ?.にすることでオプションチェーンでtasksにmap関数がなかった場合（Arrayじゃなかった場合）にエラーにならない
-  const taskList = tasks?.map((task) => (
-    <Todo
-      id={task.id}
-      name={task.name}
-      completed={task.completed}
-      key={task.id} // keyはReactで管理されている特別なプロップ 反復処理でレンダリングするものには常に固有なキーが必要
-      toggleTaskCompleted={toggleTaskCompleted} // コールバックプロップ
-      deleteTask={deleteTask} // コールバックプロップ
-      editTask={editTask} // コールバックプロップ
+  const taskList = tasks
+    // .filterはループでTrueの物だけを返す
+    // FILTER_MAPで呼び出す無名関数を指定 filterはループ時に要素を渡し無名関数の引数になる
+    .filter(FILTER_MAP[filter])
+    .map((task) => (
+      <Todo
+        id={task.id}
+        name={task.name}
+        completed={task.completed}
+        key={task.id}
+        toggleTaskCompleted={toggleTaskCompleted}
+        deleteTask={deleteTask}
+        editTask={editTask}
+      />
+    ));
+  console.log('taskList =', taskList);
+  const filterList = FILTER_NAMES.map((name) => (
+    <FilterButton
+      key={name}
+      name={name}
+      isPressed={name === filter}
+      setFilter={setFilter}
     />
   ));
-  console.log('taskList =', taskList);
 
   // なぜFormでSubmitするたびに、headingTextが更新されるか
   // tasksのsetTasksが呼ばれると、React は App コンポーネントを再レンダー する。つまり関数Appを最初からもう一度実行する。
@@ -83,9 +112,7 @@ function App(props) {
       <h1>TodoMatic</h1>
       <Form addTask={addTask} /> {/* わかりやすいようにaddTask=で関数と同じ名前でプロップを設定 */}
       <div className="filters btn-group stack-exception">
-        <FilterButton />
-        <FilterButton />
-        <FilterButton />
+        {filterList}
       </div>
       <h2 id="list-heading">{headingText}</h2>
       <ul
