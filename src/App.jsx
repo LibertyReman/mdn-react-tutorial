@@ -1,8 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { nanoid } from "nanoid"; // 一意のID生成用
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
+
+// 自作カスタムフック関数
+function usePrevious(value) {
+  // useRefは再レンダーされても値を保持する
+  const ref = useRef();
+  // レンダー後に実行され、レンダー時点の value を保存する
+  useEffect(() => {
+    ref.current = value;
+  });
+  // 前回レンダー時の value を返す
+  return ref.current;
+}
 
 // JSオブジェクト
 const FILTER_MAP = {
@@ -106,6 +118,15 @@ function App(props) {
   const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
   //console.log(headingText);
+  const listHeadingRef = useRef(null);
+  const prevTaskLength = usePrevious(tasks.length);
+
+  useEffect(() => {
+    // タスクが減った場合に<h2>をフォーカス
+    if (tasks.length < prevTaskLength) {
+      listHeadingRef.current.focus();
+    }
+  }, [tasks.length, prevTaskLength]);
 
   return (
     <div className="todoapp stack-large">
@@ -114,7 +135,9 @@ function App(props) {
       <div className="filters btn-group stack-exception">
         {filterList}
       </div>
-      <h2 id="list-heading">{headingText}</h2>
+      <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
+        {headingText}
+      </h2>
       <ul
         role="list"
         className="todo-list stack-large stack-exception"

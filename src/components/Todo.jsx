@@ -1,10 +1,27 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+// 自作カスタムフック関数
+function usePrevious(value) {
+  // useRefは再レンダーされても値を保持する
+  const ref = useRef();
+  // レンダー後に実行され、レンダー時点の value を保存する
+  useEffect(() => {
+    ref.current = value;
+  });
+  // 前回レンダー時の value を返す
+  return ref.current;
+}
 
 function Todo(props) {
   //console.log(props);
   // falseはisEditingの初期値
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewName] = useState("");
+  const editFieldRef = useRef(null);
+  const editButtonRef = useRef(null);
+  // wasEditingはisEditingの前回の値
+  const wasEditing = usePrevious(isEditing);
+  console.log('isEditing =', isEditing, 'wasEditing =', wasEditing);
 
   function handleChange(e) {
     setNewName(e.target.value);
@@ -29,6 +46,8 @@ function Todo(props) {
           type="text"
           value={newName}
           onChange={handleChange}
+          // ref は React の機能
+          ref={editFieldRef}
         />
       </div>
       <div className="btn-group">
@@ -63,9 +82,8 @@ function Todo(props) {
         <button
           type="button"
           className="btn"
-          onClick={() => {
-            setEditing(true);
-          }}>
+          onClick={() => setEditing(true)}
+          ref={editButtonRef}>
           Edit <span className="visually-hidden">{props.name}</span>
         </button>
         <button
@@ -78,6 +96,18 @@ function Todo(props) {
     </div>
   );
 
+  // useEffect(処理, [依存値]); 依存値が変更されてレンダー後にuseEffectを実行
+  useEffect(() => {
+    //console.log("side effect");
+    if (!wasEditing && isEditing) {
+      // editFieldRef.currentでDOM要素にアクセス. focus()はJSの機能
+      editFieldRef.current.focus();
+    } else if (wasEditing && !isEditing) {
+      editButtonRef.current.focus();
+    }
+  }, [wasEditing, isEditing]);
+
+  //console.log("main render");
   return <li className="todo">{isEditing ? editingTemplate : viewTemplate}</li>;
 }
 
